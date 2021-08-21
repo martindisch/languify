@@ -17,7 +17,7 @@ async fn add_classified(
 ) -> impl Responder {
     println!(
         "Got classification for text {} as {}",
-        classification.id, classification.lang
+        classification.id, classification.language
     );
     HttpResponse::NoContent()
 }
@@ -44,5 +44,5 @@ struct TextResponse<'a> {
 #[derive(Debug, Deserialize)]
 struct ClassificationRequest {
     id: usize,
-    lang: String,
+    language: String,
 }
