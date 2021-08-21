@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "build": "parcel build src/index.html",
+    "tsc": "tsc --noEmit"
   },
   "author": "Martin Disch <martindisch@gmail.com>",
   "license": "MIT",

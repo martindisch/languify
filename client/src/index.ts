@@ -1,7 +1,7 @@
 import { Terminal } from "xterm";
 import "xterm/css/xterm.css";
 
-function startTerminal(container) {
+function startTerminal(container: HTMLElement) {
   const terminal = new Terminal();
   terminal.open(container);
 
@@ -10,7 +10,7 @@ function startTerminal(container) {
 
 function start() {
   const container = document.getElementById("terminal-container");
-  startTerminal(container);
+  startTerminal(container!);
 }
 
 start();
