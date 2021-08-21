@@ -19,10 +19,6 @@ class LanguifyTerminal {
     start = async () => {
         this.terminal.onKey(this.onKey);
 
-        await this.greeting();
-    }
-
-    greeting = async() => {
         this.terminal.writeln(texts.greeting);
         this.terminal.writeln(texts.instruction);
         this.terminal.writeln("");
@@ -42,6 +38,10 @@ class LanguifyTerminal {
         this.prompt();
     }
 
+    prompt = () => {
+        this.terminal.write("> ");
+    }
+
     onKey = async ({ key }: { key: string }) => {
         const language = keyToLanguage[key];
 
@@ -51,10 +51,6 @@ class LanguifyTerminal {
 
             await this.nextText();
         }
-    }
-
-    prompt = () => {
-        this.terminal.write("> ");
     }
 }
 
