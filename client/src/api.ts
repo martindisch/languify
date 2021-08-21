@@ -13,7 +13,7 @@ class LanguifyApi {
         this.classifiedEndpoint = api_url + "/api/v1/texts/classified";
     }
 
-    async getUnclassifiedText(): Promise<UnclassifiedText> {
+    getUnclassifiedText = async () => {
         const response = await window.fetch(this.unclassifiedEndpoint, {
             method: "POST",
         });

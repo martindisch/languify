@@ -16,11 +16,11 @@ class LanguifyTerminal {
         fitAddon.fit();
     }
 
-    async start(): Promise<void> {
+    start = async () => {
         await this.greeting();
     }
 
-    async greeting(): Promise<void> {
+    greeting = async() => {
         this.terminal.writeln(texts.greeting);
         this.terminal.writeln(texts.instruction);
         this.terminal.writeln("");
@@ -34,7 +34,7 @@ class LanguifyTerminal {
         await this.nextText();
     }
 
-    async nextText(): Promise<void> {
+    nextText = async () => {
         const unclassifiedText = await this.api.getUnclassifiedText();
         this.terminal.writeln(unclassifiedText.text);
     }
