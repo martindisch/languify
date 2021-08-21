@@ -6,9 +6,9 @@ class LanguifyTerminal {
     readonly terminal: Terminal;
     readonly api: LanguifyApi;
 
-    constructor(container: HTMLElement, api_url: string) {
+    constructor(container: HTMLElement, api: LanguifyApi) {
         this.terminal = new Terminal();
-        this.api = new LanguifyApi(api_url);
+        this.api = api;
 
         const fitAddon = new FitAddon();
         this.terminal.loadAddon(fitAddon);
