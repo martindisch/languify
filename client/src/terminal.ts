@@ -1,23 +1,26 @@
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
+import { LanguifyApi } from "./api";
 
 class LanguifyTerminal {
     readonly terminal: Terminal;
-    readonly api_url: string;
+    readonly api: LanguifyApi;
 
     constructor(container: HTMLElement, api_url: string) {
         this.terminal = new Terminal();
-        this.api_url = api_url;
+        this.api = new LanguifyApi(api_url);
 
         const fitAddon = new FitAddon();
         this.terminal.loadAddon(fitAddon);
         this.terminal.open(container);
         fitAddon.fit();
-
-        this.greeting();
     }
 
-    greeting(): void {
+    async start(): Promise<void> {
+        await this.greeting();
+    }
+
+    async greeting(): Promise<void> {
         this.terminal.writeln(texts.greeting);
         this.terminal.writeln(texts.instruction);
         this.terminal.writeln("");
@@ -27,6 +30,13 @@ class LanguifyTerminal {
         this.terminal.writeln(texts.unclear_examples);
         this.terminal.writeln("");
         this.terminal.writeln(texts.first_text);
+
+        await this.next_text();
+    }
+
+    async next_text(): Promise<void> {
+        const unclassifiedText = await this.api.get_unclassified_text();
+        this.terminal.writeln(unclassifiedText.text);
     }
 }
 
