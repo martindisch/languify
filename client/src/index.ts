@@ -1,16 +1,9 @@
-import { Terminal } from "xterm";
+import { LanguifyTerminal } from "./terminal";
 import "xterm/css/xterm.css";
-
-function startTerminal(container: HTMLElement) {
-  const terminal = new Terminal();
-  terminal.open(container);
-
-  terminal.write("Terminal connected");
-}
 
 function start() {
   const container = document.getElementById("terminal-container");
-  startTerminal(container!);
+  const terminal = new LanguifyTerminal(container!);
 }
 
 start();
