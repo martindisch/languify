@@ -17,6 +17,8 @@ class LanguifyTerminal {
     }
 
     start = async () => {
+        this.terminal.onKey(this.onKey);
+
         await this.greeting();
     }
 
@@ -37,7 +39,31 @@ class LanguifyTerminal {
     nextText = async () => {
         const unclassifiedText = await this.api.getUnclassifiedText();
         this.terminal.writeln(unclassifiedText.text);
+        this.prompt();
     }
+
+    onKey = async ({ key }: { key: string }) => {
+        const language = keyToLanguage[key];
+
+        if (language !== undefined) {
+            this.terminal.writeln(language);
+            this.terminal.writeln("");
+
+            await this.nextText();
+        }
+    }
+
+    prompt = () => {
+        this.terminal.write("> ");
+    }
+}
+
+const keyToLanguage: { [index: string] : string} = {
+    "d": "de",
+    "f": "fr",
+    "i": "it",
+    "e": "en",
+    "u": "??",
 }
 
 const texts = {
