@@ -26,16 +26,16 @@ class LanguifyTerminal {
         this.terminal.writeln("");
         this.terminal.writeln(texts.languages);
         this.terminal.writeln("");
-        this.terminal.writeln(texts.unclear_explanation);
-        this.terminal.writeln(texts.unclear_examples);
+        this.terminal.writeln(texts.unclearExplanation);
+        this.terminal.writeln(texts.unclearExamples);
         this.terminal.writeln("");
-        this.terminal.writeln(texts.first_text);
+        this.terminal.writeln(texts.firstText);
 
-        await this.next_text();
+        await this.nextText();
     }
 
-    async next_text(): Promise<void> {
-        const unclassifiedText = await this.api.get_unclassified_text();
+    async nextText(): Promise<void> {
+        const unclassifiedText = await this.api.getUnclassifiedText();
         this.terminal.writeln(unclassifiedText.text);
     }
 }
@@ -47,11 +47,11 @@ Thank you for participating. You will be shown a series of texts.`,
 Classify each one by pressing the key for the appropriate language.`,
     languages: `\
 Deutsch: d, Français: f, Italiano: i, English: e, Unclear: u`,
-    unclear_explanation: `\
+    unclearExplanation: `\
 Be sure to mark texts that are impossible to assign to any single language as \
 unclear (u).`,
-    unclear_examples: `Examples are "Super", "👍 ✨ " or "Ok".`,
-    first_text: `Here comes your first text:`
+    unclearExamples: `Examples are "Super", "👍 ✨ " or "Ok".`,
+    firstText: `Here comes your first text:`
 }
 
 export { LanguifyTerminal };

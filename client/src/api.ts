@@ -4,17 +4,17 @@ interface UnclassifiedText {
 }
 
 class LanguifyApi {
-    readonly unclassified_endpoint: string;
-    readonly classified_endpoint: string;
+    readonly unclassifiedEndpoint: string;
+    readonly classifiedEndpoint: string;
 
     constructor(api_url: string) {
-        this.unclassified_endpoint =
+        this.unclassifiedEndpoint =
             api_url + "/api/v1/texts/unclassified/_next";
-        this.classified_endpoint = api_url + "/api/v1/texts/classified";
+        this.classifiedEndpoint = api_url + "/api/v1/texts/classified";
     }
 
-    async get_unclassified_text(): Promise<UnclassifiedText> {
-        const response = await window.fetch(this.unclassified_endpoint, {
+    async getUnclassifiedText(): Promise<UnclassifiedText> {
+        const response = await window.fetch(this.unclassifiedEndpoint, {
             method: "POST",
         });
 
