@@ -1,10 +1,13 @@
 use actix_cors::Cors;
-use actix_web::{post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    middleware::Logger, post, web, App, HttpResponse, HttpServer, Responder,
+};
+use log::info;
+use log::LevelFilter;
 use serde::{Deserialize, Serialize};
 
 #[post("/api/v1/texts/unclassified/_next")]
 async fn get_unclassified() -> impl Responder {
-    println!("Serving response");
     HttpResponse::Ok().json(TextResponse {
         id: 1,
         text: "The quick brown fox jumps over the lazy dog",
@@ -15,7 +18,7 @@ async fn get_unclassified() -> impl Responder {
 async fn add_classified(
     classification: web::Json<ClassificationRequest>,
 ) -> impl Responder {
-    println!(
+    info!(
         "Got classification for text {} as {}",
         classification.id, classification.language
     );
@@ -24,8 +27,13 @@ async fn add_classified(
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::builder().filter_level(LevelFilter::Info).init();
+
     HttpServer::new(|| {
+        let logger = Logger::default();
+
         App::new()
+            .wrap(logger)
             .wrap(Cors::permissive())
             .service(get_unclassified)
             .service(add_classified)
