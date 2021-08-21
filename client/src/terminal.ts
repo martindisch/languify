@@ -3,9 +3,11 @@ import { FitAddon } from 'xterm-addon-fit';
 
 class LanguifyTerminal {
     readonly terminal: Terminal;
+    readonly api_url: string;
 
-    constructor(container: HTMLElement) {
+    constructor(container: HTMLElement, api_url: string) {
         this.terminal = new Terminal();
+        this.api_url = api_url;
 
         const fitAddon = new FitAddon();
         this.terminal.loadAddon(fitAddon);
