@@ -19,17 +19,17 @@ class LanguifyApi {
         });
 
         return response.json();
-    }
+    };
 
     addClassifiedText = async (id: number, language: string) => {
         await window.fetch(this.classifiedEndpoint, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({id, language}),
-        })
-    }
+            body: JSON.stringify({ id, language }),
+        });
+    };
 }
 
 export { LanguifyApi, UnclassifiedText };

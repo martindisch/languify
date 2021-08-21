@@ -32,18 +32,18 @@ class LanguifyTerminal {
         this.terminal.writeln(texts.firstText);
 
         await this.nextText();
-    }
+    };
 
     nextText = async () => {
         const unclassifiedText = await this.api.getUnclassifiedText();
         this.currentTextId = unclassifiedText.id;
         this.terminal.writeln(unclassifiedText.text);
         this.prompt();
-    }
+    };
 
     prompt = () => {
         this.terminal.write("> ");
-    }
+    };
 
     onKey = async ({ key }: { key: string }) => {
         const language = keyToLanguage[key];
@@ -56,16 +56,16 @@ class LanguifyTerminal {
 
             await this.nextText();
         }
-    }
+    };
 }
 
-const keyToLanguage: { [index: string] : string} = {
-    "d": "de",
-    "f": "fr",
-    "i": "it",
-    "e": "en",
-    "u": "??",
-}
+const keyToLanguage: { [index: string]: string } = {
+    d: "de",
+    f: "fr",
+    i: "it",
+    e: "en",
+    u: "??",
+};
 
 const texts = {
     greeting: `\
@@ -78,7 +78,7 @@ Deutsch: d, Français: f, Italiano: i, English: e, Unclear: u`,
 Be sure to mark texts that are impossible to assign to any single language as \
 unclear (u).`,
     unclearExamples: `Examples are "Super", "👍 ✨ " or "Ok".`,
-    firstText: `Here comes your first text:`
-}
+    firstText: `Here comes your first text:`,
+};
 
 export { LanguifyTerminal };
