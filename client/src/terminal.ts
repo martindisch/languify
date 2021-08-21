@@ -5,10 +5,12 @@ import { LanguifyApi } from "./api";
 class LanguifyTerminal {
     readonly terminal: Terminal;
     readonly api: LanguifyApi;
+    currentTextId: number;
 
     constructor(container: HTMLElement, api: LanguifyApi) {
         this.terminal = new Terminal();
         this.api = api;
+        this.currentTextId = -1;
 
         const fitAddon = new FitAddon();
         this.terminal.loadAddon(fitAddon);
@@ -34,6 +36,7 @@ class LanguifyTerminal {
 
     nextText = async () => {
         const unclassifiedText = await this.api.getUnclassifiedText();
+        this.currentTextId = unclassifiedText.id;
         this.terminal.writeln(unclassifiedText.text);
         this.prompt();
     }
@@ -48,6 +51,8 @@ class LanguifyTerminal {
         if (language !== undefined) {
             this.terminal.writeln(language);
             this.terminal.writeln("");
+
+            await this.api.addClassifiedText(this.currentTextId, language);
 
             await this.nextText();
         }
