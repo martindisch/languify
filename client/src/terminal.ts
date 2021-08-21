@@ -1,5 +1,5 @@
 import { Terminal } from "xterm";
-import { FitAddon } from 'xterm-addon-fit';
+import { FitAddon } from "xterm-addon-fit";
 
 class LanguifyTerminal {
     readonly terminal: Terminal;
