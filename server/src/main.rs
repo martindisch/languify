@@ -5,7 +5,7 @@ use actix_web::{
 use log::info;
 use log::LevelFilter;
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, sync::Mutex};
+use std::{collections::hash_map, sync::Mutex};
 
 use persistence::UnclassifiedText;
 
@@ -13,10 +13,12 @@ mod persistence;
 
 #[post("/api/v1/texts/unclassified/_next")]
 async fn get_unclassified(
-    unclassified_texts: web::Data<Mutex<HashMap<usize, UnclassifiedText>>>,
+    unclassified_texts: web::Data<
+        Mutex<hash_map::IntoIter<usize, UnclassifiedText>>,
+    >,
 ) -> impl Responder {
-    let unclassified_texts = unclassified_texts.lock().unwrap();
-    let (&id, unclassified_text) = unclassified_texts.iter().next().unwrap();
+    let mut unclassified_texts = unclassified_texts.lock().unwrap();
+    let (id, unclassified_text) = unclassified_texts.next().unwrap();
 
     HttpResponse::Ok().json(TextResponse {
         id,
@@ -27,15 +29,11 @@ async fn get_unclassified(
 #[post("/api/v1/texts/classified")]
 async fn add_classified(
     classification: web::Json<ClassificationRequest>,
-    unclassified_texts: web::Data<Mutex<HashMap<usize, UnclassifiedText>>>,
 ) -> impl Responder {
     info!(
         "Got classification for text {} as {}",
         classification.id, classification.language
     );
-
-    let mut unclassified_texts = unclassified_texts.lock().unwrap();
-    unclassified_texts.remove_entry(&classification.id);
 
     HttpResponse::NoContent()
 }
@@ -46,7 +44,9 @@ async fn main() -> std::io::Result<()> {
 
     info!("Loading unclassified texts from CSV");
     let unclassified_texts = web::Data::new(Mutex::new(
-        persistence::load_unclassified("unclassified.csv").unwrap(),
+        persistence::load_unclassified("unclassified.csv")
+            .unwrap()
+            .into_iter(),
     ));
 
     HttpServer::new(move || {
