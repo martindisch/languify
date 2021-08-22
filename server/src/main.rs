@@ -59,7 +59,7 @@ async fn main() -> std::io::Result<()> {
 
     info!("Loading unclassified texts from CSV");
     let (headers, unclassified_texts) =
-        persistence::load_unclassified("unclassified.csv")
+        persistence::load_unclassified("unclassified.csv", "classified.csv")
             .expect("Unable to load unclassified texts from CSV");
 
     info!("Spawning classified texts writer");
