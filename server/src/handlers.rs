@@ -16,9 +16,9 @@ async fn get_unclassified(
     let mut unclassified_texts = unclassified_texts.lock().unwrap();
 
     match unclassified_texts.next() {
-        Some((id, unclassified_text)) => {
+        Some((languify_id, unclassified_text)) => {
             HttpResponse::Ok().json(TextResponse {
-                id,
+                id: languify_id,
                 text: &unclassified_text.text,
             })
         }
