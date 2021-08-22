@@ -7,8 +7,7 @@ use std::{
     sync::mpsc::Receiver,
 };
 
-// TODO: put the type somewhere more appropriate
-use super::ClassificationRequest;
+use crate::{ClassificationRequest, UnclassifiedText};
 
 pub fn load_unclassified(
     unclassified_path: impl AsRef<Path>,
@@ -98,12 +97,4 @@ pub fn classified_writer(
     }
 
     Ok(())
-}
-
-// TODO: move more logic into impls on this type
-#[derive(Debug, Clone)]
-pub struct UnclassifiedText {
-    pub detected_languages: Vec<String>,
-    pub id: String,
-    pub text: String,
 }
