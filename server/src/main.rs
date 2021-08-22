@@ -18,12 +18,16 @@ async fn get_unclassified(
     >,
 ) -> impl Responder {
     let mut unclassified_texts = unclassified_texts.lock().unwrap();
-    let (id, unclassified_text) = unclassified_texts.next().unwrap();
 
-    HttpResponse::Ok().json(TextResponse {
-        id,
-        text: &unclassified_text.text,
-    })
+    match unclassified_texts.next() {
+        Some((id, unclassified_text)) => {
+            HttpResponse::Ok().json(TextResponse {
+                id,
+                text: &unclassified_text.text,
+            })
+        }
+        None => HttpResponse::NotFound().finish(),
+    }
 }
 
 #[post("/api/v1/texts/classified")]
@@ -45,7 +49,7 @@ async fn main() -> std::io::Result<()> {
     info!("Loading unclassified texts from CSV");
     let unclassified_texts = web::Data::new(Mutex::new(
         persistence::load_unclassified("unclassified.csv")
-            .unwrap()
+            .expect("Unable to load unclassified texts from CSV")
             .into_iter(),
     ));
 
