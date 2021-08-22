@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 pub mod handlers;
 pub mod persistence;
 
-// TODO: move more logic into impls on this type
 #[derive(Debug, Clone)]
 pub struct UnclassifiedText {
     pub detected_languages: Vec<String>,

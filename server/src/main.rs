@@ -12,13 +12,16 @@ use std::{
 
 use languify_server::{handlers, persistence};
 
+const UNCLASSIFIED_PATH: &str = "unclassified.csv";
+const CLASSIFIED_PATH: &str = "classified.csv";
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
 
     info!("Loading unclassified texts from CSV");
-    let (headers, unclassified_texts) =
-        persistence::load_unclassified("unclassified.csv", "classified.csv")
+    let unclassified_texts =
+        persistence::load_unclassified(UNCLASSIFIED_PATH, CLASSIFIED_PATH)
             .expect("Unable to load unclassified texts from CSV");
 
     info!("Spawning classified texts writer");
@@ -26,8 +29,8 @@ async fn main() -> std::io::Result<()> {
     let unclassified_texts_copy = unclassified_texts.clone();
     thread::spawn(|| {
         persistence::classified_writer(
-            "classified.csv",
-            headers,
+            CLASSIFIED_PATH,
+            persistence::get_headers(UNCLASSIFIED_PATH)?,
             unclassified_texts_copy,
             rx,
         )
