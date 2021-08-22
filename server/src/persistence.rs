@@ -49,6 +49,7 @@ pub fn classified_writer(
     let mut writer = Writer::from_writer(file);
 
     if !file_existed {
+        headers.push("languify_id".into());
         headers.push("human".into());
         writer.write_record(headers)?;
         writer.flush()?;
@@ -61,6 +62,7 @@ pub fn classified_writer(
             let mut record = unclassified_text.detected_languages;
             record.push(unclassified_text.id);
             record.push(unclassified_text.text);
+            record.push(classified_text.id.to_string());
             record.push(classified_text.language);
 
             writer.write_record(record)?;
