@@ -13,12 +13,12 @@ pub struct UnclassifiedText {
 
 #[derive(Debug, Serialize)]
 pub struct TextResponse<'a> {
-    pub id: usize,
+    pub id: &'a str,
     pub text: &'a str,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct ClassificationRequest {
-    pub id: usize,
+    pub id: String,
     pub language: String,
 }

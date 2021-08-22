@@ -10,15 +10,15 @@ use crate::{ClassificationRequest, TextResponse, UnclassifiedText};
 #[post("/api/v1/texts/unclassified/_next")]
 async fn get_unclassified(
     unclassified_texts: web::Data<
-        Mutex<hash_map::IntoIter<usize, UnclassifiedText>>,
+        Mutex<hash_map::IntoIter<String, UnclassifiedText>>,
     >,
 ) -> impl Responder {
     let mut unclassified_texts = unclassified_texts.lock().unwrap();
 
     match unclassified_texts.next() {
-        Some((languify_id, unclassified_text)) => {
+        Some((_key, unclassified_text)) => {
             HttpResponse::Ok().json(TextResponse {
-                id: languify_id,
+                id: &unclassified_text.id,
                 text: &unclassified_text.text,
             })
         }
