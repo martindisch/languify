@@ -1,3 +1,5 @@
+//! API endpoint handlers.
+
 use actix_web::{post, web, HttpResponse, Responder};
 use log::info;
 use std::{
@@ -5,8 +7,11 @@ use std::{
     sync::{mpsc::Sender, Mutex},
 };
 
-use crate::{ClassificationRequest, TextResponse, UnclassifiedText};
+use crate::{
+    ClassifiedTextRequest, UnclassifiedText, UnclassifiedTextResponse,
+};
 
+/// Returns the next unclassified text.
 #[post("/api/v1/texts/unclassified/_next")]
 async fn get_unclassified(
     unclassified_texts: web::Data<
@@ -16,8 +21,8 @@ async fn get_unclassified(
     let mut unclassified_texts = unclassified_texts.lock().unwrap();
 
     match unclassified_texts.next() {
-        Some((_key, unclassified_text)) => {
-            HttpResponse::Ok().json(TextResponse {
+        Some((_, unclassified_text)) => {
+            HttpResponse::Ok().json(UnclassifiedTextResponse {
                 id: &unclassified_text.id,
                 text: &unclassified_text.text,
             })
@@ -26,17 +31,18 @@ async fn get_unclassified(
     }
 }
 
+/// Accepts a classified text.
 #[post("/api/v1/texts/classified")]
 async fn add_classified(
-    classification: web::Json<ClassificationRequest>,
-    tx: web::Data<Sender<ClassificationRequest>>,
+    classified_text: web::Json<ClassifiedTextRequest>,
+    tx: web::Data<Sender<ClassifiedTextRequest>>,
 ) -> impl Responder {
     info!(
         "Got classification for text {} as {}",
-        classification.id, classification.language
+        classified_text.id, classified_text.language
     );
 
-    tx.send(classification.into_inner()).unwrap();
+    tx.send(classified_text.into_inner()).unwrap();
 
     HttpResponse::NoContent()
 }

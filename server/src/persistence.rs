@@ -1,3 +1,5 @@
+//! CSV reading and writing.
+
 use csv::Writer;
 use eyre::Result;
 use std::{
@@ -7,8 +9,10 @@ use std::{
     sync::mpsc::Receiver,
 };
 
-use crate::{ClassificationRequest, UnclassifiedText};
+use crate::{ClassifiedTextRequest, UnclassifiedText};
 
+/// Returns all texts from `unclassified_path` that are not in
+/// `classified_path` yet.
 pub fn load_unclassified(
     unclassified_path: impl AsRef<Path>,
     classified_path: impl AsRef<Path>,
@@ -43,17 +47,19 @@ pub fn load_unclassified(
     Ok(unclassified_texts)
 }
 
+/// Returns the headers from the given CSV file.
 pub fn get_headers(path: impl AsRef<Path>) -> Result<Vec<String>> {
     let mut reader = csv::Reader::from_path(path)?;
 
     Ok(reader.headers()?.iter().map(str::to_owned).collect())
 }
 
+/// Worker that receives classified texts and writes them to CSV.
 pub fn classified_writer(
     classified_path: impl AsRef<Path>,
     mut headers: Vec<String>,
     mut unclassified_texts: HashMap<String, UnclassifiedText>,
-    rx: Receiver<ClassificationRequest>,
+    rx: Receiver<ClassifiedTextRequest>,
 ) -> Result<()> {
     let file_existed = classified_path.as_ref().exists();
 
@@ -86,6 +92,7 @@ pub fn classified_writer(
     Ok(())
 }
 
+/// Returns the IDs of all texts from the given CSV file.
 fn get_classified_ids(classified_path: impl AsRef<Path>) -> HashSet<String> {
     csv::Reader::from_path(classified_path)
         .map(|mut reader| {
