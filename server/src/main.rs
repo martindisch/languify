@@ -6,6 +6,8 @@ use log::info;
 use log::LevelFilter;
 use serde::{Deserialize, Serialize};
 
+mod persistence;
+
 #[post("/api/v1/texts/unclassified/_next")]
 async fn get_unclassified() -> impl Responder {
     HttpResponse::Ok().json(TextResponse {
@@ -28,6 +30,10 @@ async fn add_classified(
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
+
+    info!("Loading unclassified texts from CSV");
+    let unclassified_texts =
+        persistence::load_unclassified("unclassified.csv");
 
     HttpServer::new(|| {
         let logger = Logger::default();
