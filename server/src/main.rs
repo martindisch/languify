@@ -50,7 +50,7 @@ async fn main() -> std::io::Result<()> {
             .service(handlers::get_unclassified)
             .service(handlers::add_classified)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("127.0.0.1", 8080))?
     .run()
     .await
 }
