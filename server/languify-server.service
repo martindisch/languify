@@ -1,0 +1,11 @@
+[Unit]
+Description=languify backend
+After=network.target
+
+[Service]
+ExecStart=/opt/languify/server/target/release/languify-server
+WorkingDirectory=/opt/languify/server
+User=languify
+
+[Install]
+WantedBy=multi-user.target
